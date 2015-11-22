@@ -141,10 +141,10 @@ enum class video_aspect
 enum class frame_limit_type
 {
 	none,
-	_59_94,
-	_50,
-	_60,
 	_30,
+	_50,
+	_59_94,
+	_60,
 	_auto,
 };
 
@@ -368,8 +368,7 @@ struct cfg_root : cfg::node
 		cfg::_enum<tsx_usage> enable_TSX{this, "Enable TSX", tsx_usage::enabled}; // Enable TSX. Forcing this on Haswell/Broadwell CPUs should be used carefully
 		cfg::_bool spu_accurate_xfloat{this, "Accurate xfloat", false};
 
-		cfg::_bool debug_console_mode{this, "Debug Console Mode", false}; // Debug console emulation, not recommended
-		cfg::_enum<lib_loading_type> lib_loading{this, "Lib Loader", lib_loading_type::liblv2only};
+		cfg::_enum<lib_loading_type> lib_loading{this, "Lib loader", lib_loading_type::liblv2only};
 		cfg::_bool hook_functions{this, "Hook static functions"};
 		cfg::set_entry load_libraries{this, "Load libraries"};
 		cfg::_bool hle_lwmutex{this, "HLE lwmutex"}; // Force alternative lwmutex/lwcond implementation
@@ -441,7 +440,7 @@ struct cfg_root : cfg::node
 
 		struct node_d3d12 : cfg::node
 		{
-			node_d3d12(cfg::node* _this) : cfg::node(_this, "D3D12") {}
+			node_d3d12(cfg::node* _this) : cfg::node(_this, "DirectX 12") {}
 
 			cfg::string adapter{this, "Adapter"};
 
@@ -507,7 +506,7 @@ struct cfg_root : cfg::node
 		cfg::_enum<audio_renderer> renderer{this, "Renderer", static_cast<audio_renderer>(1)};
 
 		cfg::_bool dump_to_file{this, "Dump to file"};
-		cfg::_bool convert_to_u16{this, "Convert to 16 bit"};
+		cfg::_bool convert_to_u16{this, "Convert to 16-bit"};
 		cfg::_bool downmix_to_2ch{this, "Downmix to Stereo", true};
 		cfg::_int<2, 128> frames{this, "Buffer Count", 32};
 		cfg::_int<1, 128> startt{this, "Start Threshold", 1};
@@ -521,7 +520,7 @@ struct cfg_root : cfg::node
 
 		cfg::_enum<keyboard_handler> keyboard{this, "Keyboard", keyboard_handler::null};
 		cfg::_enum<mouse_handler> mouse{this, "Mouse", mouse_handler::basic};
-		cfg::_enum<pad_handler> pad{this, "Pad", pad_handler::keyboard};
+		cfg::_enum<pad_handler> pad{this, "Controller", pad_handler::keyboard};
 		cfg::_enum<camera_handler> camera{this, "Camera", camera_handler::null};
 		cfg::_enum<fake_camera_type> camera_type{this, "Camera type", fake_camera_type::unknown};
 		cfg::_enum<move_handler> move{this, "Move", move_handler::null};
