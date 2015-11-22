@@ -152,7 +152,7 @@ public:
 		QStringList vulkanAdapters;
 		QString name_Null = tr("Null");
 		QString name_Vulkan = tr("Vulkan");
-		QString name_D3D12 = tr("D3D12[DO NOT USE]");
+		QString name_D3D12 = tr("DirectX 12");
 		QString name_OpenGL = tr("OpenGL");
 		Render_Info D3D12;
 		Render_Info Vulkan;
@@ -223,7 +223,7 @@ private:
 		// Core Tab
 		{ PPUDecoder,               { "Core", "PPU Decoder"}},
 		{ SPUDecoder,               { "Core", "SPU Decoder"}},
-		{ LibLoadOptions,           { "Core", "Lib Loader"}},
+		{ LibLoadOptions,           { "Core", "Lib loader"}},
 		{ HookStaticFuncs,          { "Core", "Hook static functions"}},
 		{ EnableThreadScheduler,    { "Core", "Enable thread scheduler"}},
 		{ LowerSPUThreadPrio,       { "Core", "Lower SPU thread priority"}},
@@ -269,7 +269,7 @@ private:
 		{ AnisotropicFilterOverride,  { "Video", "Anisotropic Filter Override"}},
 		{ ResolutionScale,            { "Video", "Resolution Scale"}},
 		{ MinimumScalableDimension,   { "Video", "Minimum Scalable Dimension"}},
-		{ D3D12Adapter,               { "Video", "D3D12", "Adapter"}},
+		{ D3D12Adapter,               { "Video", "DirectX 12", "Adapter"}},
 		{ VulkanAdapter,              { "Video", "Vulkan", "Adapter"}},
 
 		// Performance Overlay
@@ -287,7 +287,7 @@ private:
 		// Audio
 		{ AudioRenderer,  { "Audio", "Renderer"}},
 		{ DumpToFile,     { "Audio", "Dump to file"}},
-		{ ConvertTo16Bit, { "Audio", "Convert to 16 bit"}},
+		{ ConvertTo16Bit, { "Audio", "Convert to 16-bit"}},
 		{ DownmixStereo,  { "Audio", "Downmix to Stereo"}},
 
 		// Input / Output

@@ -27,7 +27,7 @@
 inline std::string sstr(const QString& _in) { return _in.toStdString(); }
 
 game_list_frame::game_list_frame(std::shared_ptr<gui_settings> guiSettings, std::shared_ptr<emu_settings> emuSettings, QWidget *parent)
-	: custom_dock_widget(tr("Game List"), parent), m_gui_settings(guiSettings), m_emu_settings(emuSettings)
+	: custom_dock_widget(tr("Game list"), parent), m_gui_settings(guiSettings), m_emu_settings(emuSettings)
 {
 	m_isListLayout    = m_gui_settings->GetValue(gui::gl_listMode).toBool();
 	m_Margin_Factor   = m_gui_settings->GetValue(gui::gl_marginFactor).toReal();
@@ -90,18 +90,18 @@ game_list_frame::game_list_frame(std::shared_ptr<gui_settings> guiSettings, std:
 		m_columnActs.append(new QAction(action_text, this));
 	};
 
-	AddColumn(gui::column_icon,       tr("Icon"),                  tr("Show Icons"));
-	AddColumn(gui::column_name,       tr("Name"),                  tr("Show Names"));
-	AddColumn(gui::column_serial,     tr("Serial"),                tr("Show Serials"));
+	AddColumn(gui::column_icon,       tr("Icon"),                  tr("Show icons"));
+	AddColumn(gui::column_name,       tr("Name"),                  tr("Show names"));
+	AddColumn(gui::column_serial,     tr("Serial"),                tr("Show serials"));
 	AddColumn(gui::column_firmware,   tr("Firmware"),              tr("Show Firmwares"));
-	AddColumn(gui::column_version,    tr("Version"),               tr("Show Versions"));
-	AddColumn(gui::column_category,   tr("Category"),              tr("Show Categories"));
-	AddColumn(gui::column_path,       tr("Path"),                  tr("Show Paths"));
+	AddColumn(gui::column_version,    tr("Version"),               tr("Show versions"));
+	AddColumn(gui::column_category,   tr("Category"),              tr("Show categories"));
+	AddColumn(gui::column_path,       tr("Path"),                  tr("Show paths"));
 	AddColumn(gui::column_move,       tr("PlayStation Move"),      tr("Show PlayStation Move"));
-	AddColumn(gui::column_resolution, tr("Supported Resolutions"), tr("Show Supported Resolutions"));
-	AddColumn(gui::column_sound,      tr("Sound Formats"),         tr("Show Sound Formats"));
-	AddColumn(gui::column_parental,   tr("Parental Level"),        tr("Show Parental Levels"));
-	AddColumn(gui::column_compat,     tr("Compatibility"),         tr("Show Compatibility"));
+	AddColumn(gui::column_resolution, tr("Supported resolutions"), tr("Show supported resolutions"));
+	AddColumn(gui::column_sound,      tr("Sound formats"),         tr("Show sound formats"));
+	AddColumn(gui::column_parental,   tr("Parental level"),        tr("Show parental levels"));
+	AddColumn(gui::column_compat,     tr("Compatibility"),         tr("Show compatibility"));
 
 	// Events
 	connect(m_gameList, &QTableWidget::customContextMenuRequested, this, &game_list_frame::ShowContextMenu);
@@ -630,22 +630,22 @@ void game_list_frame::ShowContextMenu(const QPoint &pos)
 	hide_serial->setChecked(m_hidden_list.contains(serial));
 	myMenu.addSeparator();
 	QAction* removeGame = myMenu.addAction(tr("&Remove %1").arg(qstr(currGame.category)));
-	QAction* removeConfig = myMenu.addAction(tr("&Remove Custom Configuration"));
-	QAction* deleteShadersCache = myMenu.addAction(tr("&Delete Shaders Cache"));
-	QAction* deleteLLVMCache = myMenu.addAction(tr("&Delete LLVM Cache"));
-	QAction* deleteSPUCache = myMenu.addAction(tr("&Delete SPU Cache"));
+	QAction* removeConfig = myMenu.addAction(tr("&Remove custom configuration"));
+	QAction* deleteShadersCache = myMenu.addAction(tr("&Delete shaders cache"));
+	QAction* deleteLLVMCache = myMenu.addAction(tr("&Delete LLVM cache"));
+	QAction* deleteSPUCache = myMenu.addAction(tr("&Delete SPU cache"));
 	myMenu.addSeparator();
-	QAction* openGameFolder = myMenu.addAction(tr("&Open Install Folder"));
-	QAction* openConfig = myMenu.addAction(tr("&Open Config Folder"));
+	QAction* openGameFolder = myMenu.addAction(tr("&Open install folder"));
+	QAction* openConfig = myMenu.addAction(tr("&Open config folder"));
 	myMenu.addSeparator();
-	QAction* checkCompat = myMenu.addAction(tr("&Check Game Compatibility"));
-	QAction* downloadCompat = myMenu.addAction(tr("&Download Compatibility Database"));
+	QAction* checkCompat = myMenu.addAction(tr("&Check game compatibility"));
+	QAction* downloadCompat = myMenu.addAction(tr("&Download compatibility Database"));
 	myMenu.addSeparator();
-	QAction* editNotes = myMenu.addAction(tr("&Edit Tooltip Notes"));
-	QMenu* info_menu = myMenu.addMenu(tr("&Copy Info"));
-	QAction* copy_info = info_menu->addAction(tr("&Copy Name + Serial"));
-	QAction* copy_name = info_menu->addAction(tr("&Copy Name"));
-	QAction* copy_serial = info_menu->addAction(tr("&Copy Serial"));
+	QAction* editNotes = myMenu.addAction(tr("&Edit Tooltip notes"));
+	QMenu* info_menu = myMenu.addMenu(tr("&Copy info"));
+	QAction* copy_info = info_menu->addAction(tr("&Copy name + Serial"));
+	QAction* copy_name = info_menu->addAction(tr("&Copy name"));
+	QAction* copy_serial = info_menu->addAction(tr("&Copy serial"));
 
 	const std::string config_base_dir = fs::get_config_dir() + "data/" + currGame.serial;
 
