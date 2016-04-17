@@ -87,7 +87,8 @@ namespace asmjit
 
 bool spu_interpreter::UNK(spu_thread& spu, spu_opcode_t op)
 {
-	fmt::throw_exception("Unknown/Illegal instruction (0x%08x)" HERE, op.opcode);
+	LOG_ERROR(PPU, "Unknown/Illegal instruction (0x%08x)" HERE, op.opcode);
+	return true;
 }
 
 

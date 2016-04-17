@@ -629,6 +629,7 @@ s32 cellCameraIsStarted(s32 dev_num)
 
 	if (!g_camera || !check_dev_num(dev_num))
 	{
+		cellCamera.fatal("Camera not Available");
 		return false;
 	}
 

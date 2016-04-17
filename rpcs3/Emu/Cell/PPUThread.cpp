@@ -190,7 +190,7 @@ static bool ppu_fallback(ppu_thread& ppu, ppu_opcode_t op)
 {
 	if (g_cfg.core.ppu_decoder == ppu_decoder_type::llvm)
 	{
-		fmt::throw_exception("Unregistered PPU function");
+		LOG_FATAL(PPU, "Unregistered PPU function: 0x%x", op.opcode);
 	}
 
 	ppu_ref(ppu.cia) = ppu_cache(ppu.cia);
@@ -1228,6 +1228,18 @@ extern void ppu_initialize()
 	_main->cache = fs::get_config_dir() + "data/";
 
 	if (!Emu.GetTitleID().empty() && Emu.GetCat() != "1P")
+	{
+		// TODO
+		_main->cache += Emu.GetTitleID();
+		_main->cache += '/';
+	}
+	else if (!Emu.GetTitleID().empty() && Emu.GetCat() != "PP")
+	{
+		// TODO
+		_main->cache += Emu.GetTitleID();
+		_main->cache += '/';
+	}
+	else if (!Emu.GetTitleID().empty() && Emu.GetCat() != "PE")
 	{
 		// TODO
 		_main->cache += Emu.GetTitleID();

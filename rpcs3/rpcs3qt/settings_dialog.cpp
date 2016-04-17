@@ -1,4 +1,4 @@
-#include <QVBoxLayout>
+﻿#include <QVBoxLayout>
 #include <QButtonGroup>
 #include <QPushButton>
 #include <QMessageBox>
@@ -764,6 +764,11 @@ settings_dialog::settings_dialog(std::shared_ptr<gui_settings> guiSettings, std:
 
 	xemu_settings->EnhanceComboBox(ui->moveBox, emu_settings::Move);
 	SubscribeTooltip(ui->moveBox, json_input["moveBox"].toString());
+
+	// Checkboxes
+
+	xemu_settings->EnhanceCheckBox(ui->forceInitTracker, emu_settings::ForceInitTracker);
+	SubscribeTooltip(ui->forceInitTracker, json_input["forceInitTracker"].toString());
 
 	//     _____           _                   _______    _
 	//    / ____|         | |                 |__   __|  | |

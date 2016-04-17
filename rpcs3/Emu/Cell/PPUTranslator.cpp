@@ -84,6 +84,7 @@ PPUTranslator::PPUTranslator(LLVMContext& context, Module* module, const ppu_mod
 
 			// Ignore relative relocations, they are handled in emmitted code
 			// Comment out types we haven't confirmed as used and working
+			case 5:
 			case 10:
 			case 11:
 			// case 12:

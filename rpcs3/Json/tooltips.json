@@ -130,6 +130,7 @@
 		"keyboardHandlerBox": "Some games support native keyboard input.\nBasic will work in these cases.",
 		"mouseHandlerBox": "Some games support native mouse input.\nBasic will work in these cases.",
 		"cameraBox": "Camera support is not implemented, leave this on null.",
+		"forceInitTracker": "Force initialization tracking PSMove.",
 		"cameraTypeBox": "Camera support is not implemented, leave this on unknown.",
 		"moveBox": "PlayStation Move support.\nFake: Experimental! This maps Move controls to DS4 controller mappings."
 	},

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Utilities/File.h"
 #include "Utilities/Log.h"
@@ -109,6 +109,7 @@ public:
 		Camera,
 		CameraType,
 		Move,
+		ForceInitTracker,
 
 		// Misc
 		ExitRPCS3OnFinish,
@@ -310,6 +311,7 @@ private:
 		{ Camera,          { "Input/Output", "Camera"}},
 		{ CameraType,      { "Input/Output", "Camera type"}},
 		{ Move,            { "Input/Output", "Move" }},
+		{ ForceInitTracker,{ "Input/Output", "Force init tracker" }},
 
 		// Misc
 		{ ExitRPCS3OnFinish,         { "Miscellaneous", "Exit RPCS3 when process finishes" }},

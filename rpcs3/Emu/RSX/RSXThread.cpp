@@ -1647,6 +1647,7 @@ namespace rsx
 					switch (format)
 					{
 					case CELL_GCM_TEXTURE_X16:
+					case CELL_GCM_TEXTURE_X32_FLOAT: // Todo: U2
 					{
 						// NOP, a simple way to quickly read DEPTH16 data without shadow comparison
 						break;
