@@ -42,6 +42,12 @@
 #include "llvm/Transforms/Scalar.h"
 #include "llvm/Transforms/IPO.h"
 #include "llvm/Transforms/Vectorize.h"
+
+#ifdef POLLY_AVAILABLE
+#include <polly/RegisterPasses.h>
+#include <polly/ScopDetection.h>
+#endif
+
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
@@ -1448,7 +1454,7 @@ extern void ppu_initialize(const ppu_module& info)
 		}
 
 		// Version, module name and hash: vX-liblv2.sprx-0123456789ABCDEF.obj
-		std::string obj_name = "v2";
+		std::string obj_name = "v3-100918";
 
 		if (info.name.size())
 		{
@@ -1707,28 +1713,35 @@ static void ppu_initialize2(jit_compiler& jit, const ppu_module& module_part, co
 		}
 	}
 
+#ifdef POLLY_AVAILABLE
+	PassRegistry &Registry = *PassRegistry::getPassRegistry();
+	polly::initializePollyPasses(Registry);
+	initializeAnalysis(Registry);
+#endif
+
 	{
 		legacy::FunctionPassManager pm(module.get());
 
 		// Basic optimizations
-		//pm.add(createCFGSimplificationPass());
+		pm.add(createCFGSimplificationPass());
 		//pm.add(createPromoteMemoryToRegisterPass());
 		pm.add(createEarlyCSEPass());
-		//pm.add(createTailCallEliminationPass());
+		pm.add(createTailCallEliminationPass());
 		//pm.add(createInstructionCombiningPass());
 		//pm.add(createBasicAAWrapperPass());
 		//pm.add(new MemoryDependenceAnalysis());
-		//pm.add(createLICMPass());
-		//pm.add(createLoopInstSimplifyPass());
-		//pm.add(createNewGVNPass());
+		pm.add(createLICMPass());
+		pm.add(createLoopInstSimplifyPass());
+		pm.add(createNewGVNPass());
 		pm.add(createDeadStoreEliminationPass());
-		//pm.add(createSCCPPass());
-		//pm.add(createReassociatePass());
-		//pm.add(createInstructionCombiningPass());
+#ifdef POLLY_AVAILABLE
+		polly::registerPollyPasses(pm);
+#endif
+		pm.add(createSCCPPass());
+		pm.add(createReassociatePass());
 		//pm.add(createInstructionSimplifierPass());
-		//pm.add(createAggressiveDCEPass());
-		//pm.add(createCFGSimplificationPass());
-		//pm.add(createLintPass()); // Check
+		pm.add(createAggressiveDCEPass());
+		pm.add(createLintPass()); // Check
 
 		// Translate functions
 		for (size_t fi = 0, fmax = module_part.funcs.size(); fi < fmax; fi++)
