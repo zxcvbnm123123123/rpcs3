@@ -15,6 +15,11 @@
 #include <mutex>
 #include <thread>
 
+#ifdef POLLY_AVAILABLE
+#include <polly/RegisterPasses.h>
+#include <polly/ScopDetection.h>
+#endif
+
 extern atomic_t<const char*> g_progr;
 extern atomic_t<u64> g_progr_ptotal;
 extern atomic_t<u64> g_progr_pdone;
@@ -94,7 +99,7 @@ void spu_cache::initialize()
 	}
 
 	// SPU cache file (version + block size type)
-	const std::string loc = _main->cache + "spu-" + fmt::to_lower(g_cfg.core.spu_block_size.to_string()) + "-v5.dat";
+	const std::string loc = _main->cache + "spu-" + fmt::to_lower(g_cfg.core.spu_block_size.to_string()) + "-v5-101118.dat";
 
 	auto cache = std::make_shared<spu_cache>(loc);
 
@@ -2746,6 +2751,12 @@ public:
 			m_function_table->eraseFromParent();
 		}
 
+	#ifdef POLLY_AVAILABLE
+		PassRegistry &Registry = *PassRegistry::getPassRegistry();
+		polly::initializePollyPasses(Registry);
+		initializeAnalysis(Registry);
+	#endif
+
 		// Initialize pass manager
 		legacy::FunctionPassManager pm(module.get());
 
@@ -2757,6 +2768,10 @@ public:
 		pm.add(createLoopVersioningLICMPass());
 		pm.add(createAggressiveDCEPass());
 		//pm.add(createLintPass()); // Check
+
+	#ifdef POLLY_AVAILABLE
+		polly::registerPollyPasses(pm);
+	#endif
 
 		for (const auto& func : m_functions)
 		{
