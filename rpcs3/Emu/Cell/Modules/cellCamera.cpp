@@ -337,6 +337,9 @@ s32 cellCameraInit()
 
 	// TODO: Some other default attributes? Need to check the actual behaviour on a real PS3.
 
+	auto shared_data = fxm::get_always<gem_camera_shared>();
+	shared_data->attr.exchange(g_camera->attr);
+
 	if (g_cfg.io.camera == camera_handler::fake)
 	{
 		g_camera->is_attached = true;
@@ -440,6 +443,9 @@ s32 cellCameraOpenEx(s32 dev_num, vm::ptr<CellCameraInfoEx> info)
 	}
 
 	std::tie(info->width, info->height) = get_video_resolution(*info);
+
+	auto shared_data = fxm::get_always<gem_camera_shared>();
+	shared_data->frame_rate.exchange(info->framerate);
 
 	g_camera->is_open = true;
 	g_camera->info = *info;
