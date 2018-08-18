@@ -8,11 +8,11 @@
 
 struct ppu_overlay_module final : lv2_obj, ppu_module
 {
-	static const u32 id_base = 0x25000000;	//a proper base!
+	static const u32 id_base = 0x25000000;	//proper id base
 };
 
 struct sys_overlay_t {
-	be_t<u32> id;	//additional data unknown
+	be_t<u32> id;
 };
 
 

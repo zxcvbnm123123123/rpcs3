@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Emu/Memory/Memory.h"
+#include "Emu/Memory/vm.h"
 #include "Emu/System.h"
 #include "Emu/IdManager.h"
 #include "Crypto/unself.h"
@@ -39,9 +39,15 @@ error_code sys_overlay_load_module(vm::ptr<sys_overlay_t> ovlmid, vm::cptr<char>
 	return not_an_error(idm::last_id());
 }
 
-error_code sys_overlay_unload_module(u32 ovlmid) {
+error_code sys_overlay_unload_module(u32 ovlmid) 
+{
 	sys_overlay.warning("sys_overlay_unload_module(ovlmid=0x%x)", ovlmid);
 	const auto _main = idm::withdraw<lv2_obj, ppu_overlay_module>(ovlmid);
+
+	if (!_main)
+	{
+		return CELL_ESRCH;
+	}
 
 	for (auto& seg : _main->segs)
 	{
