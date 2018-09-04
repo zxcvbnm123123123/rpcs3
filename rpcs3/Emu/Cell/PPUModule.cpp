@@ -1689,7 +1689,7 @@ u32 ppu_load_overlay_exec(const ppu_exec_object& elf, const std::string& path)
 
 				if (info.size < sizeof(process_param_t))
 				{
-					LOG_WARNING(LOADER, "Bad process_param size! [0x%x : 0x%x]", info.size, SIZE_32(process_param_t));
+					LOG_WARNING(LOADER, "Bad process_param size! [0x%x : 0x%x]", info.size, u32{sizeof(process_param_t)});
 				}
 
 				if (info.magic != 0x4f564c4d)	//string "OVLM"
@@ -1808,8 +1808,12 @@ u32 ppu_load_overlay_exec(const ppu_exec_object& elf, const std::string& path)
 	// Validate analyser results (not required)
 	_main->validate(0);
 
+
+	//Check main elf sdk version
+	if (g_ps3_sdk_version != sdk_version)
+		fmt::throw_exception("SDK versions between main elf version: 0x%x and overlay elf version: 0x%x do not match.", g_ps3_sdk_version, sdk_version);
 	// Set SDK version
-	g_ps3_sdk_version = sdk_version;	//hopefully sdk versions betweend main elf and overlay elfs are always the same
+	g_ps3_sdk_version = sdk_version;	//hopefully sdk versions between main elf and overlay elfs are always the same
 
 	ppu_initialize(*_main);
 
