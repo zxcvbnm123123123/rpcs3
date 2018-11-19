@@ -765,6 +765,14 @@ settings_dialog::settings_dialog(std::shared_ptr<gui_settings> guiSettings, std:
 	xemu_settings->EnhanceComboBox(ui->moveBox, emu_settings::Move);
 	SubscribeTooltip(ui->moveBox, json_input["moveBox"].toString());
 
+	// Checkboxes
+
+	xemu_settings->EnhanceCheckBox(ui->forceInitTracker, emu_settings::ForceIniTracker);
+	SubscribeTooltip(ui->forceInitTracker, json_input["forceInitTracker"].toString());
+
+	xemu_settings->EnhanceCheckBox(ui->forceResetTracker, emu_settings::ForceResTracker);
+	SubscribeTooltip(ui->forceResetTracker, json_input["forceResetTracker"].toString());
+
 	//     _____           _                   _______    _
 	//    / ____|         | |                 |__   __|  | |
 	//   | (___  _   _ ___| |_ ___ _ __ ___      | | __ _| |__

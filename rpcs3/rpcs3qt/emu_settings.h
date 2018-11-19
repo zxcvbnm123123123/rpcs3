@@ -109,6 +109,8 @@ public:
 		Camera,
 		CameraType,
 		Move,
+		ForceIniTracker,
+		ForceResTracker,
 
 		// Misc
 		ExitRPCS3OnFinish,
@@ -310,6 +312,8 @@ private:
 		{ Camera,          { "Input/Output", "Camera"}},
 		{ CameraType,      { "Input/Output", "Camera type"}},
 		{ Move,            { "Input/Output", "Move" }},
+		{ ForceIniTracker, { "Input/Output", "Force init tracker" }},
+		{ ForceResTracker, { "Input/Output", "Force reset tracker" }},
 
 		// Misc
 		{ ExitRPCS3OnFinish,         { "Miscellaneous", "Exit RPCS3 when process finishes" }},
