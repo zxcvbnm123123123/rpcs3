@@ -108,8 +108,12 @@ public:
 		MouseHandler,
 		Camera,
 		CameraType,
+		CameraNumber,
 		Move,
-		ForceInitTracker,
+		MoveNumber,
+		MoveExt,
+		ForceIniTracker,
+		ForceResTracker,
 
 		// Misc
 		ExitRPCS3OnFinish,
@@ -310,8 +314,12 @@ private:
 		{ MouseHandler,    { "Input/Output", "Mouse"}},
 		{ Camera,          { "Input/Output", "Camera"}},
 		{ CameraType,      { "Input/Output", "Camera type"}},
+		{ CameraNumber,    { "Input/Output", "Camera PSEye number"}},
 		{ Move,            { "Input/Output", "Move" }},
-		{ ForceInitTracker,{ "Input/Output", "Force init tracker" }},
+		{ MoveNumber,      { "Input/Output", "PSMove number"}},
+		{ MoveExt,         { "Input/Output", "PSMove accessory"}},
+		{ ForceIniTracker, { "Input/Output", "Force init tracker"}},
+		{ ForceResTracker, { "Input/Output", "Force reset tracker"}},
 
 		// Misc
 		{ ExitRPCS3OnFinish,         { "Miscellaneous", "Exit RPCS3 when process finishes" }},

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "VFS.h"
 #include "Utilities/Atomic.h"
@@ -102,6 +102,14 @@ enum class camera_handler
 {
 	null,
 	fake,
+	pseye,
+};
+
+enum class pseye_number
+{
+	_1,
+	_2,
+	_3,
 };
 
 enum class fake_camera_type
@@ -117,6 +125,21 @@ enum class move_handler
 	null,
 	fake,
 	move,
+};
+
+enum class psmove_number
+{
+	_7,
+	_6,
+	_5,
+	_4,
+};
+
+enum class psmove_ext
+{
+	shooter,
+	wheel,
+	null,
 };
 
 enum class video_resolution
@@ -345,6 +368,7 @@ struct cfg_root : cfg::node
 
 		node_core(cfg::node* _this) : cfg::node(_this, "Core") {}
 
+		cfg::_bool debug_console_mode{this, "Debug Console Mode", false}; // Debug console emulation, not recommended
 		cfg::_enum<ppu_decoder_type> ppu_decoder{this, "PPU Decoder", ppu_decoder_type::llvm};
 		cfg::_int<1, 16> ppu_threads{this, "PPU Threads", 2}; // Amount of PPU threads running simultaneously (must be 2)
 		cfg::_bool ppu_debug{this, "PPU Debug"};
@@ -522,9 +546,13 @@ struct cfg_root : cfg::node
 		cfg::_enum<mouse_handler> mouse{this, "Mouse", mouse_handler::basic};
 		cfg::_enum<pad_handler> pad{this, "Controller", pad_handler::keyboard};
 		cfg::_enum<camera_handler> camera{this, "Camera", camera_handler::null};
-		cfg::_bool force_init_tracker{ this, "Force init tracker", false };
+		cfg::_enum<pseye_number> camera_number{this, "Camera PSEye number", pseye_number::_1};
+		cfg::_bool force_init_tracker{this, "Force init tracker", false };
+		cfg::_bool force_reset_tracker{this, "Force reset tracker", false };
 		cfg::_enum<fake_camera_type> camera_type{this, "Camera type", fake_camera_type::unknown};
 		cfg::_enum<move_handler> move{this, "Move", move_handler::null};
+		cfg::_enum<psmove_number> move_number{this, "PSMove number", psmove_number::_7};
+		cfg::_enum<psmove_ext> move_ext{this, "PSMove accessory", psmove_ext::null};
 
 	} io{this};
 

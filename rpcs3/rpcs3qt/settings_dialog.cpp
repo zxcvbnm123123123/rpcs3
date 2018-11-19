@@ -762,13 +762,25 @@ settings_dialog::settings_dialog(std::shared_ptr<gui_settings> guiSettings, std:
 	xemu_settings->EnhanceComboBox(ui->cameraBox, emu_settings::Camera);
 	SubscribeTooltip(ui->cameraBox, json_input["cameraBox"].toString());
 
+	xemu_settings->EnhanceComboBox(ui->cameraNumberBox, emu_settings::CameraNumber);
+	SubscribeTooltip(ui->cameraNumberBox, json_input["cameraNumberBox"].toString());
+
 	xemu_settings->EnhanceComboBox(ui->moveBox, emu_settings::Move);
 	SubscribeTooltip(ui->moveBox, json_input["moveBox"].toString());
 
+	xemu_settings->EnhanceComboBox(ui->moveNumberBox, emu_settings::MoveNumber);
+	SubscribeTooltip(ui->moveNumberBox, json_input["moveNumerBox"].toString());
+
+	xemu_settings->EnhanceComboBox(ui->moveExtBox, emu_settings::MoveExt);
+	SubscribeTooltip(ui->moveExtBox, json_input["moveExtBox"].toString());
+
 	// Checkboxes
 
-	xemu_settings->EnhanceCheckBox(ui->forceInitTracker, emu_settings::ForceInitTracker);
+	xemu_settings->EnhanceCheckBox(ui->forceInitTracker, emu_settings::ForceIniTracker);
 	SubscribeTooltip(ui->forceInitTracker, json_input["forceInitTracker"].toString());
+
+	xemu_settings->EnhanceCheckBox(ui->forceResetTracker, emu_settings::ForceResTracker);
+	SubscribeTooltip(ui->forceResetTracker, json_input["forceResetTracker"].toString());
 
 	//     _____           _                   _______    _
 	//    / ____|         | |                 |__   __|  | |

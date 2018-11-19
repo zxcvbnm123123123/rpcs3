@@ -403,7 +403,6 @@ public:
 
 	CameraAttributes attr;
 
-	lv2_memory_container container;
 	atomic_t<u32> frame_num;
 };
 

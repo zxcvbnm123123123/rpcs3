@@ -975,6 +975,16 @@
             <item>
              <widget class="QComboBox" name="moveBox"/>
             </item>
+            <item>
+             <widget class="QComboBox" name="moveNumberBox"/>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="forceResetTracker">
+              <property name="text">
+               <string>Force reset tracker</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </widget>
          </item>
@@ -1004,6 +1014,9 @@
              <widget class="QComboBox" name="cameraBox"/>
             </item>
             <item>
+             <widget class="QComboBox" name="cameraNumberBox"/>
+            </item>
+            <item>
              <widget class="QCheckBox" name="forceInitTracker">
               <property name="text">
                <string>Force init tracker</string>
@@ -1014,7 +1027,16 @@
           </widget>
          </item>
          <item>
-          <widget class="QWidget" name="widget_7" native="true"/>
+          <widget class="QGroupBox" name="groupBox_54">
+           <property name="title">
+            <string>PSMove Accessory</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_75">
+            <item>
+             <widget class="QComboBox" name="moveExtBox"/>
+            </item>
+           </layout>
+          </widget>
          </item>
         </layout>
        </item>
