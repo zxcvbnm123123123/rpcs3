@@ -401,32 +401,55 @@ void GLGSRender::end()
 	//Bind textures and resolve external copy operations
 	std::chrono::time_point<steady_clock> textures_start = steady_clock::now();
 	void *unused = nullptr;
-	gl::texture_view* tmp_view;
+	gl::texture_view* view;
 
 	for (int i = 0; i < rsx::limits::fragment_textures_count; ++i)
 	{
-		if (current_fp_metadata.referenced_textures_mask & (1 << i))
+		const auto mask = (1 << i);
+
+		if (current_fp_metadata.referenced_textures_mask & mask)
 		{
 			auto sampler_state = static_cast<gl::texture_cache::sampled_image_descriptor*>(fs_sampler_state[i].get());
 			auto &tex = rsx::method_registers.fragment_textures[i];
 
-			glActiveTexture(GL_TEXTURE0 + i);
+			const bool double_assign = !!(current_fragment_program.redirected_textures & mask);
+
+			_SelectTexture(GL_FRAGMENT_TEXTURES_START + i);
 
 			if (tex.enabled())
 			{
 				if (sampler_state->image_handle)
 				{
-					sampler_state->image_handle->bind();
+					view = sampler_state->image_handle;
 				}
-				else if (sampler_state->external_subresource_desc.external_handle &&
-					(tmp_view = m_gl_texture_cache.create_temporary_subresource(unused, sampler_state->external_subresource_desc)))
+				else if (sampler_state->external_subresource_desc.external_handle)
 				{
-					tmp_view->bind();
+					view = m_gl_texture_cache.create_temporary_subresource(unused, sampler_state->external_subresource_desc);
+				}
+
+				if (LIKELY(view))
+				{
+					view->bind();
+
+					if (double_assign)
+					{
+						auto root_texture = static_cast<gl::viewable_image*>(view->image());
+						auto stencil_view = root_texture->get_view(0xAAE4, rsx::default_remap_vector, gl::image_aspect::stencil);
+
+						_SelectTexture(GL_STENCIL_MIRRORS_START + i);
+						stencil_view->bind();
+					}
 				}
 				else
 				{
 					auto target = gl::get_target(sampler_state->image_type);
 					glBindTexture(target, m_null_textures[target]->id());
+
+					if (double_assign)
+					{
+						_SelectTexture(GL_STENCIL_MIRRORS_START + i);
+						glBindTexture(target, m_null_textures[target]->id());
+					}
 				}
 			}
 			else
@@ -435,6 +458,16 @@ void GLGSRender::end()
 				glBindTexture(GL_TEXTURE_2D, m_null_textures[GL_TEXTURE_2D]->id());
 				glBindTexture(GL_TEXTURE_3D, m_null_textures[GL_TEXTURE_3D]->id());
 				glBindTexture(GL_TEXTURE_CUBE_MAP, m_null_textures[GL_TEXTURE_CUBE_MAP]->id());
+
+				if (double_assign)
+				{
+					_SelectTexture(GL_STENCIL_MIRRORS_START + i);
+
+					glBindTexture(GL_TEXTURE_1D, m_null_textures[GL_TEXTURE_1D]->id());
+					glBindTexture(GL_TEXTURE_2D, m_null_textures[GL_TEXTURE_2D]->id());
+					glBindTexture(GL_TEXTURE_3D, m_null_textures[GL_TEXTURE_3D]->id());
+					glBindTexture(GL_TEXTURE_CUBE_MAP, m_null_textures[GL_TEXTURE_CUBE_MAP]->id());
+				}
 			}
 		}
 	}
@@ -444,7 +477,7 @@ void GLGSRender::end()
 		if (current_vp_metadata.referenced_textures_mask & (1 << i))
 		{
 			auto sampler_state = static_cast<gl::texture_cache::sampled_image_descriptor*>(vs_sampler_state[i].get());
-			glActiveTexture(GL_TEXTURE0 + rsx::limits::fragment_textures_count + i);
+			glActiveTexture(GL_VERTEX_TEXTURES_START + i);
 
 			if (sampler_state->image_handle)
 			{
@@ -773,25 +806,23 @@ void GLGSRender::on_init_thread()
 		m_max_texbuffer_size = (16 * 0x100000);
 	}
 
-	const u32 texture_index_offset = rsx::limits::fragment_textures_count + rsx::limits::vertex_textures_count;
-
 	//Array stream buffer
 	{
 		m_gl_persistent_stream_buffer = std::make_unique<gl::texture>(GL_TEXTURE_BUFFER, 0, 0, 0, 0, GL_R8UI);
-		glActiveTexture(GL_TEXTURE0 + texture_index_offset);
+		_SelectTexture(GL_STREAM_BUFFER_START + 0);
 		glBindTexture(GL_TEXTURE_BUFFER, m_gl_persistent_stream_buffer->id());
 	}
 
 	//Register stream buffer
 	{
 		m_gl_volatile_stream_buffer = std::make_unique<gl::texture>(GL_TEXTURE_BUFFER, 0, 0, 0, 0, GL_R8UI);
-		glActiveTexture(GL_TEXTURE0 + texture_index_offset + 1);
+		_SelectTexture(GL_STREAM_BUFFER_START + 1);
 		glBindTexture(GL_TEXTURE_BUFFER, m_gl_volatile_stream_buffer->id());
 	}
 
 	//Fallback null texture instead of relying on texture0
 	{
-		std::vector<u32> pixeldata = {0, 0, 0, 0};
+		std::vector<u32> pixeldata = { 0, 0, 0, 0 };
 
 		//1D
 		auto tex1D = std::make_unique<gl::texture>(GL_TEXTURE_1D, 1, 1, 1, 1, GL_RGBA8);
@@ -888,16 +919,24 @@ void GLGSRender::on_init_thread()
 		}
 	}
 
-	for (int i = 0; i < rsx::limits::fragment_textures_count; ++i)
+	int image_unit = 0;
+	for (auto &sampler : m_fs_sampler_states)
 	{
-		m_fs_sampler_states[i].create();
-		m_fs_sampler_states[i].bind(i);
+		sampler.create();
+		sampler.bind(image_unit++);
 	}
 
-	for (int i = 0; i < rsx::limits::vertex_textures_count; ++i)
+	for (auto &sampler : m_fs_sampler_mirror_states)
 	{
-		m_vs_sampler_states[i].create();
-		m_vs_sampler_states[i].bind(rsx::limits::fragment_textures_count + i);
+		sampler.create();
+		sampler.apply_defaults();
+		sampler.bind(image_unit++);
+	}
+
+	for (auto &sampler : m_vs_sampler_states)
+	{
+		sampler.create();
+		sampler.bind(image_unit++);
 	}
 
 	//Occlusion query
@@ -1033,6 +1072,11 @@ void GLGSRender::on_exit()
 	m_gl_volatile_stream_buffer.reset();
 
 	for (auto &sampler : m_fs_sampler_states)
+	{
+		sampler.remove();
+	}
+
+	for (auto &sampler : m_fs_sampler_mirror_states)
 	{
 		sampler.remove();
 	}
